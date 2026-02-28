@@ -1,0 +1,4 @@
+openclaw/agents/*/sessions/
+openclaw/cron/runs/
+openclaw/workspaces/*/.openclaw/
+openclaw/workspaces/*/.clawhub/

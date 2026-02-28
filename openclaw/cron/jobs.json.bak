@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "7159b3b9-dfed-49d5-bb4e-63d64d4194f6",
+      "agentId": "main",
+      "sessionKey": "agent:main:discord:channel:1476148932395667520",
+      "name": "HackerNews Daily Digest",
+      "enabled": true,
+      "createdAtMs": 1772257594602,
+      "updatedAtMs": 1772260949274,
+      "schedule": {
+        "expr": "0 17 * * *",
+        "tz": "Asia/Shanghai",
+        "kind": "cron"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行 HackerNews 每日精选：\n1. 用 web_fetch 抓取 https://news.ycombinator.com/ 获取热门内容\n2. 读取 memory/hackernews-prefs.md 获取偏好\n3. 筛选 AI/编程/技术相关内容，热度 > 50\n4. 整理成简洁列表，格式：热度 [标题](链接)\n5. 用 message 工具发送到频道 1477188751682703410，不要 embed"
+      },
+      "delivery": {
+        "mode": "none",
+        "channel": "discord",
+        "to": "1477188751682703410"
+      },
+      "state": {
+        "nextRunAtMs": 1772269200000,
+        "lastRunAtMs": 1772260896143,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 53131,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      }
+    }
+  ]
+}
