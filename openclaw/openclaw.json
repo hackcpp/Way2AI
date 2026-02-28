@@ -1,0 +1,216 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.25",
+    "lastTouchedAt": "2026-02-28T02:21:58.917Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-28T02:21:58.902Z",
+    "lastRunVersion": "2026.2.25",
+    "lastRunCommand": "configure",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "minimax-cn:default": {
+        "provider": "minimax-cn",
+        "mode": "api_key"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "minimax-cn": {
+        "baseUrl": "https://api.minimaxi.com/anthropic",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax M2.5",
+            "reasoning": true,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0.3,
+              "output": 1.2,
+              "cacheRead": 0.03,
+              "cacheWrite": 0.12
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "minimax-cn/MiniMax-M2.5"
+      },
+      "models": {
+        "minimax-cn/MiniMax-M2.5": {
+          "alias": "Minimax"
+        }
+      },
+      "workspace": "~/.openclaw/workspaces/main"
+    },
+    "list": [
+      {
+        "id": "main",
+        "name": "Main Agent",
+        "workspace": "~/.openclaw/workspaces/main",
+        "model": {
+          "primary": "minimax-cn/MiniMax-M2.5"
+        },
+        "subagents": {
+          "allowAgents": [
+            "*"
+          ]
+        },
+        "tools": {
+          "allow": [
+            "*"
+          ]
+        }
+      },
+      {
+        "id": "writer",
+        "name": "Writer Agent",
+        "workspace": "~/.openclaw/workspaces/writer",
+        "model": {
+          "primary": "minimax-cn/MiniMax-M2.5"
+        },
+        "tools": {
+          "allow": [
+            "*"
+          ]
+        }
+      }
+    ]
+  },
+  "tools": {
+    "sessions": {
+      "visibility": "all"
+    },
+    "message": {},
+    "exec": {
+      "security": "full"
+    },
+    "agentToAgent": {
+      "enabled": true,
+      "allow": [
+        "*"
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "accountId": "main"
+      }
+    },
+    {
+      "agentId": "writer",
+      "match": {
+        "channel": "discord",
+        "accountId": "writer"
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "bash": true,
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "allowBots": true,
+      "groupPolicy": "allowlist",
+      "streaming": "off",
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "${USER_ID}"
+      ],
+      "accounts": {
+        "main": {
+          "token": "${DISCORD_BOT_TOKEN}",
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "guilds": {
+            "${SERVER_ID}": {
+              "requireMention": true,
+              "users": [
+                "${USER_ID}"
+              ],
+              "channels": {
+                "${MAIN_CHANNEL_ID}": {
+                  "allow": true
+                },
+                "${WRITER_CHANNEL_ID}": {
+                  "allow": true
+                },
+                "${DAILY_NEWS_CHANNEL_ID}": {
+                  "allow": true
+                }
+              }
+            }
+          }
+        },
+        "writer": {
+          "token": "${DISCORD_BOT_TOKEN}",
+          "groupPolicy": "allowlist",
+          "streaming": "off",
+          "guilds": {
+            "${SERVER_ID}": {
+              "requireMention": true,
+              "users": [
+                "${USER_ID}"
+              ],
+              "channels": {
+                "${MAIN_CHANNEL_ID}": {
+                  "allow": true
+                },
+                "WRITER_CHANNEL_ID": {
+                  "allow": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "d03a13ca7fe1dfa6352b03ca4e30a9a164f81fe9b7793cf6"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "calendar.add",
+        "contacts.add",
+        "reminders.add"
+      ]
+    }
+  }
+}
